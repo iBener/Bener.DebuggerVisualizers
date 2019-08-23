@@ -11,13 +11,7 @@ namespace Bener.DebuggerVisualizers
 {
     public class GenericObjectSource : DataTableObjectSource
     {
-        public override void GetData(object target, Stream outgoingData)
-        {
-            var data = CreateDataTable(target);
-            base.GetData(data, outgoingData);
-        }
-
-        public DataTable CreateDataTable(object data)
+        public override DataTable CreateDataTable(object data)
         {
             var type = data.GetType();
 

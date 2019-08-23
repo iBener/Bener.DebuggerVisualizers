@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,14 @@ namespace Bener.DebuggerVisualizers
 {
     public abstract class DataTableObjectSource : VisualizerObjectSource
     {
+        public abstract DataTable CreateDataTable(object data);
+
+        public override void GetData(object target, Stream outgoingData)
+        {
+            var data = CreateDataTable(target);
+            base.GetData(data, outgoingData);
+        }
+
         public DataTable CreateDataTable<T>(List<T> data)
         {
             var dt = new DataTable("List");
@@ -80,7 +89,7 @@ namespace Bener.DebuggerVisualizers
             }
         }
 
-        protected static bool IsValueType(Type type) =>
+        private static bool IsValueType(Type type) =>
             typeof(byte) == type ||
             typeof(sbyte) == type ||
             typeof(short) == type ||
