@@ -1,5 +1,9 @@
 # Bener.DebuggerVisualizers
-Visual Studio 2019 debugger visualizers for List<> and Dictionary<,> objects.
+Debugger visualizer for .net projects. 
+Supported types:
+* List<>
+* Dictionary<>
+* DataRow
 
 ## Installation
 Build the project and copy output DLL to the one of the following locations:
