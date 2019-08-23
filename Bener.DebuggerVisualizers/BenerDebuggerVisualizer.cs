@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,12 @@ typeof(BenerDebuggerVisualizer),
 typeof(GenericObjectSource),
 Target = typeof(Dictionary<,>),
 Description = "Bener Dictionary<,> Visualizer")]
+
+[assembly: System.Diagnostics.DebuggerVisualizer(
+typeof(BenerDebuggerVisualizer),
+typeof(DataRowObjectSource),
+Target = typeof(DataRow),
+Description = "Bener DataRow Visualizer")]
 
 namespace Bener.DebuggerVisualizers
 {
