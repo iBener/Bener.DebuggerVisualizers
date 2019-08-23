@@ -2,7 +2,7 @@
 Debugger visualizer for .net projects. 
 Supported types:
 * List<>
-* Dictionary<>
+* Dictionary<,>
 * DataRow
 
 ## Installation
