@@ -50,9 +50,6 @@
     <Compile Include="BenerDebuggerVisualizer.cs" />
     <Compile Include="DataTableObjectSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test\MockDataSource.cs" />
-    <Compile Include="Test\Person.cs" />
-    <Compile Include="Test\Program.cs" />
     <Compile Include="VisualizerForm.cs">
       <SubType>Form</SubType>
     </Compile>
