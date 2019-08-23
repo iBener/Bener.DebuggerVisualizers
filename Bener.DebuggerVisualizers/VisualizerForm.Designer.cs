@@ -66,6 +66,7 @@
             this.Name = "VisualizerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bener Visualizer";
+            this.Load += new System.EventHandler(this.VisualizerForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 

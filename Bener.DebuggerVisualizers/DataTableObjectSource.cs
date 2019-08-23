@@ -19,28 +19,7 @@ namespace Bener.DebuggerVisualizers
             base.GetData(data, outgoingData);
         }
 
-        public DataTable CreateDataTable<T>(List<T> data)
-        {
-            var dt = new DataTable("List");
-            dt.Columns.Add("#", typeof(int))
-                .AutoIncrement = true;
-            AddColumns(dt, typeof(T), "Key");
-            AddRows(dt, data);
-            return dt;
-        }
-
-        public DataTable CreateDataTable<TKey, TValue>(Dictionary<TKey, TValue> data)
-        {
-            var dt = new DataTable("Dictionary");
-            dt.Columns.Add("#", typeof(int))
-                .AutoIncrement = true;
-            AddColumns(dt, typeof(TKey), "Key");
-            AddColumns(dt, typeof(TValue), "Value");
-            AddRows(dt, data);
-            return dt;
-        }
-
-        private void AddColumns(DataTable dt, Type type, string columnName)
+        protected void AddColumns(DataTable dt, Type type, string columnName = "Value")
         {
             if (IsValueType(type))
             {
@@ -50,31 +29,38 @@ namespace Bener.DebuggerVisualizers
             {
                 foreach (var prp in type.GetProperties())
                 {
-                    AddColumns(dt, prp.PropertyType, prp.Name);
+                    if (IsValueType(prp.PropertyType))
+                    {
+                        dt.Columns.Add(prp.Name, typeof(byte[]) != prp.PropertyType ? prp.PropertyType : typeof(string)); 
+                    }
+                    else
+                    {
+                        dt.Columns.Add(prp.Name, typeof(string)).ExtendedProperties.Add("ReadOnly", true);
+                    }
                 }
             }
         }
 
-        private void AddRows<T>(DataTable dt, List<T> list)
+        protected void AddRows<T>(DataTable dt, List<T> list)
         {
             foreach (var item in list)
             {
                 var row = dt.Rows.Add();
-                FillRow(row, item.GetType(), item, "Value");
+                FillRow(row, item.GetType(), item);
             }
         }
 
-        private void AddRows<TKey, TValue>(DataTable dt, Dictionary<TKey, TValue> dict)
+        protected void AddRows<TKey, TValue>(DataTable dt, Dictionary<TKey, TValue> dict)
         {
             foreach (var item in dict)
             {
                 var row = dt.Rows.Add();
                 FillRow(row, item.Key.GetType(), item.Key, "Key");
-                FillRow(row, item.Value.GetType(), item.Value, "Value");
+                FillRow(row, item.Value.GetType(), item.Value);
             }
         }
 
-        private void FillRow(DataRow row, Type type, object item, string columnName)
+        private void FillRow(DataRow row, Type type, object item, string columnName = "Value")
         {
             if (IsValueType(type))
             {
@@ -84,7 +70,14 @@ namespace Bener.DebuggerVisualizers
             {
                 foreach (var prp in type.GetProperties())
                 {
-                    FillRow(row, prp.PropertyType, prp.GetValue(item), prp.Name);
+                    if (IsValueType(prp.PropertyType))
+                    {
+                        row[prp.Name] = typeof(byte[]) != prp.PropertyType ? prp.GetValue(item) : "0x" + String.Concat(Array.ConvertAll(prp.GetValue(item) as byte[], x => x.ToString("x2"))); 
+                    }
+                    else
+                    {
+                        row[prp.Name] = "<Object>";
+                    }
                 }
             }
         }
